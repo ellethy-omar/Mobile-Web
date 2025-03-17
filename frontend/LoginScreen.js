@@ -9,7 +9,8 @@ export default function LoginScreen({navigation}) {
     username: '',
     password: '',
     showPassword: false,
-  });
+    });
+
   const [RegisterState, setRegisterState] = useState({
     username: '',
     password: '',
@@ -68,7 +69,7 @@ export default function LoginScreen({navigation}) {
     },[]);
 
 
-  const isDisabled = LoginState.username.length == 0 || LoginState.password.length == 0;
+  const isDisabled = isLogin && (LoginState.username.length == 0 || LoginState.password.length == 0) || !isLogin && (RegisterState.username.length == 0 || RegisterState.password.length == 0 || RegisterState.passwordConfirm.length == 0 || RegisterState.password !== RegisterState.passwordConfirm);
 
   function LoginForm() {
     return (<>
@@ -88,16 +89,19 @@ export default function LoginScreen({navigation}) {
   }
   
   function RegisterForm() {
+    const mismatch = RegisterState.password !== RegisterState.passwordConfirm;
     return (<>
         <TextInput value={RegisterState.username} style={styles.textboxes} placeholder="Username" onChangeText={text => setRegisterState({...RegisterState, username: text})}/>
         <TextInput value={RegisterState.password} style={styles.textboxes} secureTextEntry={!RegisterState.showPassword} placeholder="Password" onChangeText={text => setRegisterState({...RegisterState, password: text})}/>
         <TextInput value={RegisterState.passwordConfirm} style={styles.textboxes} secureTextEntry={!RegisterState.showPassword} placeholder="Confirm Password" onChangeText={text => setRegisterState({...RegisterState, passwordConfirm: text})}/>
-
         <TouchableOpacity onPress={() => setRegisterState({...RegisterState, showPassword: !RegisterState.showPassword})}>
             <Text style={{ fontWeight: '700'}}>
             {RegisterState.showPassword ? 'Hide Password' : 'Show Password'}
             </Text>
         </TouchableOpacity>
+        <View style={{minHeight: 20}}>
+            <Text style={{color: mismatch ? 'red' : 'transparent', fontSize:16}}>Passwords do not match</Text>
+        </View>
         <TouchableOpacity style={[styles.button, isDisabled && styles.buttonDisabled]} disabled={isDisabled} onPress={() => Submit()}>
             <Text style={{color: isDisabled ? "#aaaaaa" : "#eeeeee", fontWeight:"700"}}>Register</Text>
         </TouchableOpacity>
