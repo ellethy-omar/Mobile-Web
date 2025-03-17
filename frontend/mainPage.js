@@ -10,9 +10,16 @@ export default MainPage = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setTimeout(() => {
-            setLoading(false);
-        }, 2000);
+        fetch('http://localhost:3000/items')
+            .then(response => response.json())
+            .then(data => {
+                setItems(data);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error('Error fetching items:', error);
+                setLoading(false);
+            });
     }, []);
 
     function ListItem({ item, index }) {
