@@ -1,0 +1,132 @@
+import React, { useContext, useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
+import { ItemsContext } from './itemsContext';
+
+export default MainPage = () => {
+    const navigation = useNavigation();
+    const { items, setItems } = useContext(ItemsContext);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, []);
+
+    function ListItem({ item, index }) {
+        return (
+            <View style={styles.singleItem}>
+                <Text style={{fontSize: 18, fontWeight: 'bold'}}>{item.name}</Text>
+                <Text style={{fontSize: 14, fontWeight: 'semibold'}}>Description: {item.description}</Text>
+                <Text style={{fontSize: 14, fontWeight: 'semibold'}}>Price: {item.price}</Text>
+                <TouchableOpacity title="Add to cart" onPress={() => addToCart(index)}>
+                    <Text style={[styles.button, item.added ? styles.addedButton : styles.addButton]}>
+                        {!item.added ? "Add to cart" : "Added to cart"}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    const addToCart = (index) => {
+        const newItems = [...items];
+        newItems[index].added = true;
+        setItems(newItems);
+    }
+
+    if (loading) {
+        return (
+            <View style={[styles.container, styles.loadingContainer]}>
+                <Text style={styles.loadingText}>Loading...</Text>
+            </View>
+        );
+    }
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>Item list</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+                    <Icon name="shopping-cart" size={26} color="#fff" />
+                </TouchableOpacity>
+            </View>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                {items.map((item, index) => (
+                    <View key={index}>
+                        <ListItem item={item} index={index} />
+                    </View>
+                ))}
+            </ScrollView>
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    titleContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        backgroundColor: '#4A90E2', // Blue
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        zIndex: 1
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: 'white',
+        flex: 1,
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#F5F5F5', // Light Gray
+        paddingTop: 60 // Adjust this value based on the height of the titleContainer
+    },
+    scrollViewContent: {
+        paddingTop: 10,
+        gap: 10,
+    },
+    loadingContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1
+    },
+    loadingText: {
+        fontSize: 24,
+        fontWeight: '600',
+        textAlign: 'center',
+        color: '#333' // Dark Gray
+    },
+    singleItem: {
+        width: '95%',
+        margin: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 8,
+        backgroundColor: '#FFFFFF', // White
+        padding: 10,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#DDD' // Light Gray
+    },
+    button: {
+        padding: 8,
+        borderRadius: 5,
+        textAlign: 'center',
+        color: 'white'
+    },
+    addButton: {
+        backgroundColor: '#4CAF50', // Green
+    },
+    addedButton: {
+        backgroundColor: '#FF5722', // Orange
+    }
+});
