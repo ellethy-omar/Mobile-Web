@@ -123,7 +123,9 @@ export default function LoginScreen({navigation}) {
             <Text style={styles.header}>Welcome</Text>
             {isLogin ? LoginForm() : RegisterForm()}
         </View>
+        
         {StateToggle()}
+        <Button title="DEBUG Go to Main Page" onPress={() => navigation.navigate('MainPage')} />
       <StatusBar style="auto" />
     </View>
   );
