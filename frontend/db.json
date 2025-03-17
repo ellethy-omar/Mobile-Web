@@ -1,0 +1,35 @@
+{
+    "items": [
+      {
+        "id": 1,
+        "name": "Item 1",
+        "description": "Description 1",
+        "price": "Price 1",
+        "added": false
+      },
+      {
+        "id": 2,
+        "name": "Item 2",
+        "description": "Description 2",
+        "price": "Price 2",
+        "added": false
+      }
+    ],
+    "users": [
+        {
+            "id": 1,
+            "name": "User 1",
+            "password": "pass1"
+        },
+        {
+            "id": 2,
+            "name": "User 2",
+            "password": "pass2"
+        },
+        {
+            "id": 3,
+            "name": "User 3",
+            "password": "pass3"
+        }
+    ]
+}
