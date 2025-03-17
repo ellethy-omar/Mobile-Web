@@ -125,7 +125,6 @@ export default function LoginScreen({navigation}) {
         </View>
         
         {StateToggle()}
-        <Button title="DEBUG Go to Main Page" onPress={() => navigation.navigate('MainPage')} />
       <StatusBar style="auto" />
     </View>
   );
