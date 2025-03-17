@@ -1,14 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const UserAPI = require("../Controllers/UserController")
+const {
+    UserAPISuccess,
+    UserAPIFailure,
+    UserGetItems,
+    UserLogin,
+    UserSignUp
+} = require('../Controllers/UserController');
 
-router.get("/", (req, res)=> {
-    res.json(result = {
-        statusbar: true
-    })
-})
+const { requireAuth } = require("../middleware/requireAuth");
 
-router.get("/success", UserAPI.UserAPISuccess);
-router.get("/failure", UserAPI.UserAPIFailure);
+// Public routes (no authentication required)
+router.post('/signup', UserSignUp);
+router.post('/login', UserLogin);
+
+// Protected routes (require valid JWT token)
+router.use(requireAuth);
+
+router.get('/items', UserGetItems);
+router.get('/success', UserAPISuccess);
 
 module.exports = router;
