@@ -12,17 +12,17 @@ export default CartPage = () => {
 
     const removeFromCart = (index) => {
         const newItems = [...items];
-        newItems[index].added = false;
+        newItems.find(item => item.Item_ID === index).added = false;
         setItems(newItems);
     };
 
-    function ListItem({ item, index }) {
+    function ListItem({ item }) {
         return (
             <View style={styles.singleItem}>
-                <Text style={{fontSize: 18, fontWeight: 'bold'}}>{item.name}</Text>
-                <Text style={{fontSize: 14, fontWeight: 'semibold'}}>Description: {item.description}</Text>
-                <Text style={{fontSize: 14, fontWeight: 'semibold'}}>Price: {item.price}</Text>
-                <TouchableOpacity title="Remove from cart" onPress={() => removeFromCart(index)}>
+                <Text style={{fontSize: 18, fontWeight: 'bold'}}>{item.Item_name}</Text>
+                <Text style={{fontSize: 14, fontWeight: 'semibold'}}>Description: {item.Description}</Text>
+                <Text style={{fontSize: 14, fontWeight: 'semibold'}}>Price: {item.Price}</Text>
+                <TouchableOpacity title="Remove from cart" onPress={() => removeFromCart(item.Item_ID)}>
                     <Text style={styles.button}>Remove from cart</Text>
                 </TouchableOpacity>
             </View>
@@ -37,7 +37,7 @@ export default CartPage = () => {
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 {cartItems.map((item, index) => (
                     <View key={index}>
-                        <ListItem item={item} index={index} />
+                        <ListItem item={item} />
                     </View>
                 ))}
             </ScrollView>

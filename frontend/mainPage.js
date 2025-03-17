@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { ItemsContext } from './itemsContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default MainPage = () => {
     const navigation = useNavigation();
@@ -10,25 +11,35 @@ export default MainPage = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:3000/items')
+        async function fetchData() {
+            try {
+            const token = await AsyncStorage.getItem('sessionToken');
+            fetch('http://192.168.1.2:4123/api/user/items', { method: 'GET', 
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+             }})
             .then(response => response.json())
             .then(data => {
-                setItems(data);
+                const itemsAdded = data.items.recordset.map(item => ({ ...item, added: false }));
+                setItems(itemsAdded);
                 setLoading(false);
             })
-            .catch(error => {
-                console.error('Error fetching items:', error);
-                setLoading(false);
-            });
+            }  catch(error) {
+                console.error("Error fetching data:", error);
+                console.log(error);
+                alert("An error occurred. Please try again later.");
+            }}
+        fetchData();
     }, []);
 
-    function ListItem({ item, index }) {
+    function ListItem({ item }) {
         return (
             <View style={styles.singleItem}>
-                <Text style={{fontSize: 18, fontWeight: 'bold'}}>{item.name}</Text>
-                <Text style={{fontSize: 14, fontWeight: 'semibold'}}>Description: {item.description}</Text>
-                <Text style={{fontSize: 14, fontWeight: 'semibold'}}>Price: {item.price}</Text>
-                <TouchableOpacity title="Add to cart" onPress={() => addToCart(index)}>
+                <Text style={{fontSize: 18, fontWeight: 'bold'}}>{item.Item_name}</Text>
+                <Text style={{fontSize: 14, fontWeight: 'semibold'}}>Description: {item.Description}</Text>
+                <Text style={{fontSize: 14, fontWeight: 'semibold'}}>Price: {item.Price}</Text>
+                <TouchableOpacity title="Add to cart" onPress={() => addToCart(item.Item_ID)}>
                     <Text style={[styles.button, item.added ? styles.addedButton : styles.addButton]}>
                         {!item.added ? "Add to cart" : "Added to cart"}
                     </Text>
@@ -39,7 +50,7 @@ export default MainPage = () => {
 
     const addToCart = (index) => {
         const newItems = [...items];
-        newItems[index].added = true;
+        newItems.find(item => item.Item_ID === index).added = true;
         setItems(newItems);
     }
 
@@ -49,8 +60,7 @@ export default MainPage = () => {
                 <Text style={styles.loadingText}>Loading...</Text>
             </View>
         );
-    }
-
+    } else 
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
@@ -62,7 +72,7 @@ export default MainPage = () => {
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 {items.map((item, index) => (
                     <View key={index}>
-                        <ListItem item={item} index={index} />
+                        <ListItem item={item} />
                     </View>
                 ))}
             </ScrollView>
