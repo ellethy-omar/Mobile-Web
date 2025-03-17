@@ -10,5 +10,9 @@ router.get("/", (req, res)=> {
 
 router.get("/success", UserAPI.UserAPISuccess);
 router.get("/failure", UserAPI.UserAPIFailure);
+router.post("/Login",UserAPI.UserLogin);
+router.post("/Register",UserAPI.UserRegister);
+router.get("/Retrieve",UserAPI.RetrieveAll);
+router.get('/RetrieveByID/:id',UserAPI.RetrieveByID);
 
 module.exports = router;
