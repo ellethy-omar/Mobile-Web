@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen({navigation}) {
   const [isLogin, setIsLogin] = useState(true);
@@ -20,25 +21,35 @@ export default function LoginScreen({navigation}) {
 
     async function Submit() {
       try {
-        alert("Break")
-        return;
-      let user = await fetch('https://simpleback-75013-default-rtdb.firebaseio.com/users.json');
-      user = await user.json();
-      user = Object.values(user).find(user => user.username === LoginState.username);
-      console.log(user);
-      if (user) {
-        if (user.password === password)
-        {
-          alert('Login successful');
-          navigation.navigate('Profile', {user});
+        // Remember to update with your actual IP until I figure out why localhost is refusing to work
+        const url = isLogin ? "http://192.168.8.139:4123/api/user/login" : "http://192.168.8.139:4123/api/user/signup";
+        const body = JSON.stringify({
+          username: isLogin ? LoginState.username : RegisterState.username,
+          password: isLogin ? LoginState.password : RegisterState.password,
+        });
+
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer dummyToken123", // Dummy authorization header
+          },
+          body: body,
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          alert(isLogin ? "Login successful" : "Signup successful");
+            await AsyncStorage.setItem('sessionToken', data.token);
+            navigation.navigate("MainPage", { user: data.user });
+        } else {
+          alert(data.error || "An error occurred. Please try again.");
         }
-        else alert('Invalid username or password');
-      } else {
-        alert('User not found');
-      }
       } catch (error) {
-      console.error('Error fetching data:', error);
-      alert('An error occurred. Please try again later.');
+        console.error("Error fetching data:", error);
+        console.log(error);
+        alert("An error occurred. Please try again later.");
       }
     }
 
@@ -46,7 +57,7 @@ export default function LoginScreen({navigation}) {
         const checkLoginStatus = async () => {
             try {
                 const token = await AsyncStorage.getItem('sessionToken');
-                if (token) {
+                /*if (token) {
                     // Assuming you have an endpoint to verify the token
                     const response = await fetch('https://yourapi.com/verifyToken', {
                         method: 'POST',
@@ -59,9 +70,9 @@ export default function LoginScreen({navigation}) {
                     if (result.valid) {
                         navigation.navigate('Profile', { user: result.user });
                     }
-                }
+                }*/
             } catch (error) {
-                console.error('Error checking login status:', error);
+                //console.error('Error checking login status:', error);
             }
         };
 
