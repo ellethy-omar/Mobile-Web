@@ -4,40 +4,22 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import LoginScreen from './LoginScreen';
-
-const HomeScreen = () => (
-  <View style={styles.container}>
-    <Text>Home Screen</Text>
-    <StatusBar style="auto" />
-  </View>
-);
-
-const DetailsScreen = () => (
-  <View style={styles.container}>
-    <Text>Details Screen</Text>
-    <StatusBar style="auto" />
-  </View>
-);
+import MainPage from './mainPage';
+import CartPage from './cartPage';
+import { ItemsProvider } from './itemsContext';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false }} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ItemsProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false }} />
+          <Stack.Screen name="MainPage" component={MainPage} />
+          <Stack.Screen name="Cart" component={CartPage} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ItemsProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
