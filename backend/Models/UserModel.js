@@ -63,7 +63,7 @@ async function GetAllItems() {
     try {
         await sql.connect(config)
         const result = await sql.query(`SELECT * FROM Items`);
-        return result.rowsAffected;
+        return result;
     } catch (error) {
         console.log('Error: ', error);
         throw error;
