@@ -1,3 +1,4 @@
+// filepath: d:\codes\web\project\Mobile-Web\frontend\mainPage.js
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,23 +14,23 @@ export default MainPage = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-            const token = await AsyncStorage.getItem('sessionToken');
-            fetch('http://192.168.1.2:4123/api/user/items', { method: 'GET', 
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-             }})
-            .then(response => response.json())
-            .then(data => {
+                const token = await AsyncStorage.getItem('sessionToken');
+                const response = await fetch(`http://192.168.1.191:4123/api/user/items`, {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
                 const itemsAdded = data.items.recordset.map(item => ({ ...item, added: false }));
                 setItems(itemsAdded);
                 setLoading(false);
-            })
-            }  catch(error) {
+            } catch (error) {
                 console.error("Error fetching data:", error);
-                console.log(error);
                 alert("An error occurred. Please try again later.");
-            }}
+            }
+        }
         fetchData();
     }, []);
 
