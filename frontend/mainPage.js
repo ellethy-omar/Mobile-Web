@@ -1,4 +1,3 @@
-// filepath: d:\codes\web\project\Mobile-Web\frontend\mainPage.js
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -15,7 +14,7 @@ export default MainPage = () => {
         async function fetchData() {
             try {
                 const token = await AsyncStorage.getItem('sessionToken');
-                const response = await fetch(`http://192.168.1.191:4123/api/user/items`, {
+                const response = await fetch(`http://192.168.1.214:4123/api/user/items`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -65,6 +64,9 @@ export default MainPage = () => {
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                    <Text style={styles.logout}>logout</Text>
+                </TouchableOpacity>
                 <Text style={styles.title}>Item list</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
                     <Icon name="shopping-cart" size={26} color="#fff" />
@@ -83,10 +85,6 @@ export default MainPage = () => {
 
 const styles = StyleSheet.create({
     titleContainer: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -95,6 +93,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 10,
         zIndex: 1
+    },
+    logout: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'white',
     },
     title: {
         fontSize: 20,
@@ -106,7 +109,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5F5F5', // Light Gray
-        paddingTop: 60 // Adjust this value based on the height of the titleContainer
     },
     scrollViewContent: {
         paddingTop: 10,

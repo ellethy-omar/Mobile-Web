@@ -22,7 +22,7 @@ export default function LoginScreen({navigation}) {
     async function Submit() {
       try {
         // Remember to update with your actual IP until I figure out why localhost is refusing to work
-        const url = isLogin ? "http://192.168.1.2:4123/api/user/login" : "http://192.168.1.2:4123/api/user/signup";
+        const url = isLogin ? "http://192.168.1.214:4123/api/user/login" : "http://192.168.1.214:4123/api/user/signup";
         const body = JSON.stringify({
           username: isLogin ? LoginState.username : RegisterState.username,
           password: isLogin ? LoginState.password : RegisterState.password,
