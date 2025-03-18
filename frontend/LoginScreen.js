@@ -21,6 +21,13 @@ export default function LoginScreen({navigation}) {
     });
 
     async function Submit() {
+      const alphanumericRegex = /^[a-z0-9]+$/i;
+
+      if (!alphanumericRegex.test(isLogin ? LoginState.username : RegisterState.username)) {
+        alert("Username must be alphanumeric.");
+        return;
+      }
+
       try {
         // Remember to update with your actual IP until I figure out why localhost is refusing to work
         const url = isLogin ? "http://"+ TheIP + ":4123/api/user/login" : "http://"+ TheIP + ":4123/api/user/signup";
@@ -41,7 +48,7 @@ export default function LoginScreen({navigation}) {
         const data = await response.json();
         
         if (response.ok) {
-          alert(isLogin ? "Login successful" : "Signup successful");
+            //alert(isLogin ? "Login successful" : "Signup successful");
             await AsyncStorage.setItem('sessionToken', data.token);
             navigation.navigate("MainPage", { user: data.user });
         } else {
@@ -111,12 +118,12 @@ export default function LoginScreen({navigation}) {
             {RegisterState.showPassword ? 'Hide Password' : 'Show Password'}
             </Text>
         </TouchableOpacity>
-        <View style={{minHeight: 20}}>
-            <Text style={{color: mismatch ? 'red' : 'transparent', fontSize:16}}>Passwords do not match</Text>
-        </View>
         <TouchableOpacity style={[styles.button, isDisabled && styles.buttonDisabled]} disabled={isDisabled} onPress={() => Submit()}>
             <Text style={{color: isDisabled ? "#aaaaaa" : "#eeeeee", fontWeight:"700"}}>Register</Text>
         </TouchableOpacity>
+        <View>
+            <Text style={{color: mismatch ? 'red' : 'transparent', fontSize:16}}>Passwords do not match</Text>
+        </View>
         </>
     )
   }
@@ -124,7 +131,7 @@ export default function LoginScreen({navigation}) {
   function StateToggle() {
     return(
         <TouchableOpacity onPress={() => setIsLogin(!isLogin)}>
-            <Text style={{color: '#1111cc', fontWeight: '600', fontSize:20 }}>Switch to {isLogin ? 'Register' : 'Login'}</Text>
+            <Text style={{color: '#999999', fontWeight: '600', fontSize:16,textAlign:'center'}}>{isLogin ? 'No account? Touch to sign up' : 'Already have an account? Touch to login'}</Text>
         </TouchableOpacity>
     )
   };
@@ -144,7 +151,7 @@ export default function LoginScreen({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.9,
+    flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -175,9 +182,9 @@ formContainer: {
     borderRadius: 5,
     marginBlock: 20,
     
-    backgroundColor: 'red',
+    backgroundColor: '#4A90E2',
   },
   buttonDisabled: {
-    backgroundColor: '#990000',
+    backgroundColor: '#003366',
   },
 });
