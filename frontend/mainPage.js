@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { ItemsContext } from './itemsContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TheIP from './constants/WriteYourIPHere';
 
 export default MainPage = () => {
     const navigation = useNavigation();
