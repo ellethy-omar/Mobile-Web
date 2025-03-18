@@ -3,6 +3,7 @@ import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TheIP from './constants/WriteYourIPHere';
 
 export default function LoginScreen({navigation}) {
   const [isLogin, setIsLogin] = useState(true);
@@ -22,7 +23,7 @@ export default function LoginScreen({navigation}) {
     async function Submit() {
       try {
         // Remember to update with your actual IP until I figure out why localhost is refusing to work
-        const url = isLogin ? "http://192.168.1.2:4123/api/user/login" : "http://192.168.1.2:4123/api/user/signup";
+        const url = isLogin ? "http://"+ TheIP + ":4123/api/user/login" : "http://"+ TheIP + ":4123/api/user/signup";
         const body = JSON.stringify({
           username: isLogin ? LoginState.username : RegisterState.username,
           password: isLogin ? LoginState.password : RegisterState.password,

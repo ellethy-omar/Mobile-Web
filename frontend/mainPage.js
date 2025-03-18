@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { ItemsContext } from './itemsContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TheIP from './constants/WriteYourIPHere';
 
 export default MainPage = () => {
     const navigation = useNavigation();
@@ -15,7 +16,7 @@ export default MainPage = () => {
         async function fetchData() {
             try {
                 const token = await AsyncStorage.getItem('sessionToken');
-                const response = await fetch(`http://192.168.1.191:4123/api/user/items`, {
+                const response = await fetch(`http://${TheIP}:4123/api/user/items`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
