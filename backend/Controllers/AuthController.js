@@ -49,7 +49,7 @@ const login = async (req, res) => {
     if (!usernameOrEmail || !password) {
       return res.status(400).json({ error: 'Both username/email and password are required' });
     }
-    
+
     try {
       // Use the new static method to check if the user exists
       const user = await User.findByUsernameOrEmail(usernameOrEmail);
@@ -68,7 +68,6 @@ const login = async (req, res) => {
     
       res.status(200).json({
         message: 'Login successful',
-        user,
         token
       });
     } catch (error) {

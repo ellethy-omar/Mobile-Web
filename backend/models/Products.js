@@ -7,7 +7,7 @@ const productSchema = new Schema({
   name: { type: String, required: true, unique: true },
   decription: { type: String, required: true, unique: true },
   phone: String,
-  password: { type: String, required: true, select: false },
+  price: {type : Number, required : true},
   createdAt: { type: Date, default: Date.now }
 });
 
