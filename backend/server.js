@@ -41,7 +41,7 @@ const ProductRouter = require('./routes/ProductRoutes');
 app.use("/api/products", ProductRouter);  
 
 app.use((req,res)=> {
-    res.status(400).json({error: "invalud Route"});
+    res.status(404).json({error: "invalud Route"});
 })
 
 app.listen(PORT , () => {

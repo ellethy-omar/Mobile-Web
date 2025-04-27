@@ -1,4 +1,4 @@
-const User = require("../Models/User")
+const User = require("../models/User")
 const bcrypt = require('bcrypt');
 const validator = require('validator');
 const { generateToken } = require('../middleware/requireAuth'); // Import your JWT generator
