@@ -1,18 +1,18 @@
 const Product = require('../models/Products');
-const User = require("../Models/User");
 
-const getProductsForUser = async (req, res) => {
+const getAllProducts = async (req, res) => {
     try {
-        const products = Product.find();    
-        res.status(201).json({
+        const products = await Product.find(); // Add await
+        console.log(products);
+        res.status(200).json({
             products
-        })  
+        });
     } catch (error) {
-        console.error('Registration error:', error);
-        res.status(500).json({ error: 'Server error during fetching prodcuts' });
+        console.error('Fetching products error:', error);
+        res.status(500).json({ error: 'Server error during fetching products' });
     }
 };
 
 module.exports = {
-    getProductsForUser
+    getAllProducts
 }
